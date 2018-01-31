@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=LuKa Wallet
+Comment=LuKa wallet
+Exec=LuKa %U
+Terminal=false
+Type=Application
+Icon=intensecoin
+MimeType=x-scheme-handler/intensecoin;
+Categories=Office;Finance;
