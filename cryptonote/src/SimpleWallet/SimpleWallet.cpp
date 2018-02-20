@@ -480,6 +480,7 @@ simple_wallet::simple_wallet(System::Dispatcher& dispatcher, const CryptoNote::C
     "<mixin_count> is the number of transactions yours is indistinguishable from (from 0 to maximum available)");
   m_consoleHandler.setHandler("set_log", boost::bind(&simple_wallet::set_log, this, _1), "set_log <level> - Change current log level, <level> is a number 0-4");
   m_consoleHandler.setHandler("address", boost::bind(&simple_wallet::print_address, this, _1), "Show current wallet public address");
+  m_consoleHandler.setHandler("keys", boost::bind(&simple_wallet::print_keys, this, _1), "Show wallet private keys");
   m_consoleHandler.setHandler("save", boost::bind(&simple_wallet::save, this, _1), "Save wallet synchronized data");
   m_consoleHandler.setHandler("reset", boost::bind(&simple_wallet::reset, this, _1), "Discard cache data and start synchronizing from the start");
   m_consoleHandler.setHandler("help", boost::bind(&simple_wallet::help, this, _1), "Show this help");
@@ -1056,6 +1057,24 @@ bool simple_wallet::print_address(const std::vector<std::string> &args/* = std::
   return true;
 }
 //----------------------------------------------------------------------------------------------------
+
+//----------------
+// Metodo para imprimir las llaves privadas --> Private Key Luka
+
+bool simple_wallet::print_keys(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
+	AccountKeys keys;
+	m_wallet->getAccountKeys(keys);
+	success_msg_writer() << "Address: " << m_wallet->getAddress();
+	success_msg_writer() << "Secret spend key: " << keys.spendSecretKey;
+	success_msg_writer() << "Secret view key: " << keys.viewSecretKey;
+	return true;
+}
+
+//----------------
+
+
+
+
 bool simple_wallet::process_command(const std::vector<std::string> &args) {
   return m_consoleHandler.runCommand(args);
 }
