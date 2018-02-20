@@ -129,9 +129,10 @@ const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;          //
 const char     P2P_STAT_TRUSTED_PUB_KEY[] = "";
 
 const char* const SEED_NODES[] = {
-	"seed78.cryptoluka.cl:52420",
 	"seed79.cryptoluka.cl:52420",
-	"seed80.cryptoluka.cl:52420"
+	"seed80.cryptoluka.cl:52420",
+	"seed152.cryptoluka.cl:52420",
+	"seed219.cryptoluka.cl:52420"
 };
 
 struct CheckpointData {
@@ -140,7 +141,8 @@ struct CheckpointData {
 };
 
 const CheckpointData CHECKPOINTS[] = {
-	{ 0, "3e7b089856003ff9706e8db0a530bfec03d91143491086a2835fcdc2a38373e0"}
+	{ 0, "3e7b089856003ff9706e8db0a530bfec03d91143491086a2835fcdc2a38373e0"},
+	{ 18000, "4a0fd7a883ca5a180aaec36cbc1c2c204ef2f703170851b61e1de035e32b1613"}
 };
 }
 
