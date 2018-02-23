@@ -671,7 +671,7 @@ bool RpcServer::on_get_total_coins(const COMMAND_RPC_GET_TOTAL_COINS::request& r
 	uint32_t height = m_core.getTopBlockIndex();
 	Hash hash = m_core.getBlockHashByIndex(height);	
 	BlockDetails blkDetails = m_core.getBlockDetails(hash);
-	uint64_t addDevCoins = 14992032108270070;
+	uint64_t addDevCoins = 0; // Fixed Premine 2% Genesis
 	res.alreadyGeneratedCoins = std::to_string(blkDetails.alreadyGeneratedCoins + addDevCoins);
 	res.status = CORE_RPC_STATUS_OK;
 	return true;
