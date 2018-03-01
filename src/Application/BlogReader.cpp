@@ -42,7 +42,7 @@ const char BLOG_RSS_LINK_TAG_NAME[] = "link";
 const char BLOG_RSS_LINK_HREF_ATTRIBUTE_NAME[] = "href";
 const char BLOG_RSS_TITLE_TAG_NAME[] = "title";
 const char BLOG_RSS_CONTENT_TAG_NAME[] = "content";
-const char BLOG_RSS_UPDATED_TAG_NAME[] = "updated";
+const char BLOG_RSS_UPDATED_TAG_NAME[] = "published";
 
 const int MAX_MESSAGE_COUNT = 5;
 
