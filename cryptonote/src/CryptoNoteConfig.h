@@ -28,7 +28,7 @@ namespace parameters {
 const uint32_t CRYPTONOTE_MAX_BLOCK_NUMBER                   = 500000000;
 const size_t   CRYPTONOTE_MAX_BLOCK_BLOB_SIZE                = 500000000;
 const size_t   CRYPTONOTE_MAX_TX_SIZE                        = 1000000000;
-const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX       = 115; // addresses start with "i"
+const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX       = 115; // addresses start with "L"
 const uint32_t CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW          = 10;
 const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT            = 60 * 60 * 2;
 
@@ -145,7 +145,8 @@ const CheckpointData CHECKPOINTS[] = {
 	{ 163, "b96a73c6d78c40ccd08e7f8578e2fb57395348eab0d0e5b4ad778783e89fa621"},
 	{ 164, "57b496b43159e766da46cacf307e06183c3832e65225941b297bcd124e3c3e5b"}, // Dead Peer
 	{ 165, "e15372c7a3ad29dbcf4009b4f9ed43586777b046650b81c2d56ca5dbc6a935e6"},
-	{ 18000, "4a0fd7a883ca5a180aaec36cbc1c2c204ef2f703170851b61e1de035e32b1613"}
+	{ 18000, "4a0fd7a883ca5a180aaec36cbc1c2c204ef2f703170851b61e1de035e32b1613"},
+	{ 25900, "1183f7d7de6aaeae755e626614df0ef9610bf2df24d032bb7a1d0f9f2650a08a"}
 };
 }
 
