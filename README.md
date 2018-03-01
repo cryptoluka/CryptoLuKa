@@ -12,7 +12,7 @@ Luka es la nueva Cryptomoneda de origen Chileno, la cual nace de un impulso de c
 Compila tu LUK ya.
 
 
-## 💾 Instalación
+## 💾 Instalación UNIX
 
 
 ```bash
@@ -22,14 +22,14 @@ $ apt-get install qtbase5-dev libssl-dev cmake git libboost1.58-all-dev build-es
 $ git clone https://github.com/cryptoluka/cryptoluka
 $ cd cryptoluka/
 $ cmake CMakeLists.txt
-$ make install -j 2
+$ make -j 8
 $ cd cryptonote/
-$ make install -j 2
+$ make -j 8
 ```
 
 ## Uso
 
-Despues de la compilación con exito, haz click en el binario LUK. Se empieza el nodo y se sincroniza con peers. No te olvides de crear una contraseña a tu cartera.
+Despues de la compilación con exito, haz click en el binario LUK. Se empieza el nodo y se sincroniza con peers. No te olvides de exportar tu llave privada antes de crear una contraseña a tu cartera.
 
 Se quieres minar con tu CPU, oprima el boton "Start Mining".
 
@@ -42,6 +42,12 @@ Se quieres minar con tu CPU, oprima el boton "Start Mining".
 ## Recursos
 * [Pagina Oficial](https://www.cryptoluka.cl/)
 * [Pool Oficial](http://pool.cryptoluka.cl)
+
+## Sociales
+* [Facebook](https://www.facebook.com/cryptoluka)
+* [Twitter](https://twitter.com/LukaCLP)
+* [Blog](https://www.cryptoluka.com/blog)
+* [Telegram Español](https://t.me/cryptoluka)
 
 ## ❤️ Creditos
 * [Equipo Luka](https://github.com/cryptoluka/cryptoluka)
