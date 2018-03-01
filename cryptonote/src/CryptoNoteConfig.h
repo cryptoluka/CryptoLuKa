@@ -35,8 +35,8 @@ const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT            = 60 * 60 * 2;
 const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW             = 60;
 
 // MONEY_SUPPLY - total number coins to be generated
-const uint64_t MONEY_SUPPLY									 = UINT64_C(10000000000000000);
-const uint64_t FINAL_SUBSIDY_PER_MINUTE						 = UINT64_C(200000000);
+const uint64_t MONEY_SUPPLY									 = UINT64_C(10000000000000000); // 100M
+const uint64_t FINAL_SUBSIDY_PER_MINUTE						 = UINT64_C(20000000); // 0.20 LUK
 const unsigned EMISSION_SPEED_FACTOR                         = 22;
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
@@ -142,6 +142,9 @@ struct CheckpointData {
 
 const CheckpointData CHECKPOINTS[] = {
 	{ 0, "3e7b089856003ff9706e8db0a530bfec03d91143491086a2835fcdc2a38373e0"},
+	{ 163, "b96a73c6d78c40ccd08e7f8578e2fb57395348eab0d0e5b4ad778783e89fa621"},
+	{ 164, "57b496b43159e766da46cacf307e06183c3832e65225941b297bcd124e3c3e5b"}, // Dead Peer
+	{ 165, "e15372c7a3ad29dbcf4009b4f9ed43586777b046650b81c2d56ca5dbc6a935e6"},
 	{ 18000, "4a0fd7a883ca5a180aaec36cbc1c2c204ef2f703170851b61e1de035e32b1613"}
 };
 }
