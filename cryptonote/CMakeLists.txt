@@ -3,10 +3,11 @@ cmake_minimum_required(VERSION 2.8.6)
 set(VERSION "0.1")
 set(REFS " (HEAD -> master)")
 
-set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.10.0\\5.10.0\\msvc2015_64")
-set(BOOST_ROOT "C:\\local\\boost_1_64_0_14_64")
-set(BOOST_LIBRARYDIR "C:\\local\\boost_1_64_0_14_64\\libs")
-
+if(WIN32)
+  set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.10.0\\5.10.0\\msvc2015_64")
+  set(BOOST_ROOT "C:\\local\\boost_1_64_0_14_64")
+  set(BOOST_LIBRARYDIR "C:\\local\\boost_1_64_0_14_64\\libs")
+endif()
 
 # Get the current working branch
 execute_process(
