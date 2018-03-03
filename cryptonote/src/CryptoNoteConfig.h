@@ -132,7 +132,8 @@ const char* const SEED_NODES[] = {
 	"seed79.cryptoluka.cl:52420",
 	"seed80.cryptoluka.cl:52420",
 	"seed152.cryptoluka.cl:52420",
-	"seed219.cryptoluka.cl:52420"
+	"seed219.cryptoluka.cl:52420",
+	"luka.chilepool.cl:52420"
 };
 
 struct CheckpointData {
@@ -146,7 +147,8 @@ const CheckpointData CHECKPOINTS[] = {
 	{ 164, "57b496b43159e766da46cacf307e06183c3832e65225941b297bcd124e3c3e5b"}, // Dead Peer
 	{ 165, "e15372c7a3ad29dbcf4009b4f9ed43586777b046650b81c2d56ca5dbc6a935e6"},
 	{ 18000, "4a0fd7a883ca5a180aaec36cbc1c2c204ef2f703170851b61e1de035e32b1613"},
-	{ 25900, "1183f7d7de6aaeae755e626614df0ef9610bf2df24d032bb7a1d0f9f2650a08a"}
+	{ 25900, "1183f7d7de6aaeae755e626614df0ef9610bf2df24d032bb7a1d0f9f2650a08a"},
+	{ 27483, "7c485abdc0418ccab03ba2dc57087db89b83721744d2beb0a17cc7ae9e694f07"} // Forked Emission
 };
 }
 
