@@ -46,7 +46,7 @@ Se quieres minar con tu CPU, oprima el boton "Start Mining".
 ## Sociales
 * [Facebook](https://www.facebook.com/cryptoluka)
 * [Twitter](https://twitter.com/LukaCLP)
-* [Blog](https://www.cryptoluka.com/blog)
+* [Blog](https://www.cryptoluka.cl/blog)
 * [Telegram Español](https://t.me/cryptoluka)
 
 ## ❤️ Creditos
