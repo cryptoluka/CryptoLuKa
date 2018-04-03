@@ -26,17 +26,17 @@ namespace CryptoNote {
 namespace parameters {
 
 const uint32_t CRYPTONOTE_MAX_BLOCK_NUMBER                   = 500000000;
-const size_t   CRYPTONOTE_MAX_BLOCK_BLOB_SIZE                = 500000000;
+const size_t   CRYPTONOTE_MAX_BLOCK_BLOB_SIZE                = 5000000000;
 const size_t   CRYPTONOTE_MAX_TX_SIZE                        = 1000000000;
-const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX       = 115; // addresses start with "i"
+const uint64_t CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX       = 115; // addresses start with "L"
 const uint32_t CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW          = 10;
 const uint64_t CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT            = 60 * 60 * 2;
 
 const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW             = 60;
 
 // MONEY_SUPPLY - total number coins to be generated
-const uint64_t MONEY_SUPPLY									 = UINT64_C(10000000000000000);
-const uint64_t FINAL_SUBSIDY_PER_MINUTE						 = UINT64_C(200000000);
+const uint64_t MONEY_SUPPLY									 = UINT64_C(10000000000000000); // 100M
+const uint64_t FINAL_SUBSIDY_PER_MINUTE						 = UINT64_C(20000000); // 0.20 LUK
 const unsigned EMISSION_SPEED_FACTOR                         = 22;
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
@@ -107,7 +107,7 @@ const uint8_t  BLOCK_MINOR_VERSION_0                         =  0;
 const uint8_t  BLOCK_MINOR_VERSION_1                         =  0;
 
 const size_t   BLOCKS_IDS_SYNCHRONIZING_DEFAULT_COUNT        =  10000;  //by default, blocks ids count in synchronizing
-const size_t   BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  100;    //by default, blocks count in blocks downloading
+const size_t   BLOCKS_SYNCHRONIZING_DEFAULT_COUNT            =  128;    //by default, blocks count in blocks downloading
 const size_t   COMMAND_RPC_GET_BLOCKS_FAST_MAX_COUNT         =  1000;
 
 const int      P2P_DEFAULT_PORT                              =  52420;
@@ -116,7 +116,7 @@ const int      RPC_DEFAULT_PORT                              =  52421;
 const size_t   P2P_LOCAL_WHITE_PEERLIST_LIMIT                =  1000;
 const size_t   P2P_LOCAL_GRAY_PEERLIST_LIMIT                 =  5000;
 
-const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 32 * 1024 * 1024; // 32 MB
+const size_t   P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE          = 64 * 1024 * 1024; // 64 MB
 const uint32_t P2P_DEFAULT_CONNECTIONS_COUNT                 = 8;
 const size_t   P2P_DEFAULT_WHITELIST_CONNECTIONS_PERCENT     = 70;
 const uint32_t P2P_DEFAULT_HANDSHAKE_INTERVAL                = 60;            // seconds
@@ -129,9 +129,11 @@ const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;          //
 const char     P2P_STAT_TRUSTED_PUB_KEY[] = "";
 
 const char* const SEED_NODES[] = {
-	"seed78.cryptoluka.cl:52420",
 	"seed79.cryptoluka.cl:52420",
-	"seed80.cryptoluka.cl:52420"
+	"seed80.cryptoluka.cl:52420",
+	"seed152.cryptoluka.cl:52420",
+	"seed219.cryptoluka.cl:52420",
+	"luka.chilepool.cl:52420"
 };
 
 struct CheckpointData {
@@ -140,7 +142,13 @@ struct CheckpointData {
 };
 
 const CheckpointData CHECKPOINTS[] = {
-	{ 0, "3e7b089856003ff9706e8db0a530bfec03d91143491086a2835fcdc2a38373e0"}
+	{ 0, "3e7b089856003ff9706e8db0a530bfec03d91143491086a2835fcdc2a38373e0"},
+	{ 163, "b96a73c6d78c40ccd08e7f8578e2fb57395348eab0d0e5b4ad778783e89fa621"},
+	{ 164, "57b496b43159e766da46cacf307e06183c3832e65225941b297bcd124e3c3e5b"}, // Dead Peer
+	{ 165, "e15372c7a3ad29dbcf4009b4f9ed43586777b046650b81c2d56ca5dbc6a935e6"},
+	{ 18000, "4a0fd7a883ca5a180aaec36cbc1c2c204ef2f703170851b61e1de035e32b1613"},
+	{ 25900, "1183f7d7de6aaeae755e626614df0ef9610bf2df24d032bb7a1d0f9f2650a08a"},
+	{ 27483, "7c485abdc0418ccab03ba2dc57087db89b83721744d2beb0a17cc7ae9e694f07"} // Forked Emission
 };
 }
 
