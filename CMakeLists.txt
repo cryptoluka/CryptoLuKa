@@ -9,10 +9,11 @@ OUTPUT_VARIABLE GIT_REVISION)
 
 set(CRYPTONOTE_LIB cryptonote)
 
-set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.10.0\\5.10.0\\msvc2015_64")
-set(BOOST_ROOT "C:\\local\\boost_1_64_0_14_64")
-set(BOOST_LIBRARYDIR "C:\\local\\boost_1_64_0_14_64\\libs")
-
+if(WIN32)
+  set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.10.0\\5.10.0\\msvc2015_64")
+  set(BOOST_ROOT "C:\\local\\boost_1_64_0_14_64")
+  set(BOOST_LIBRARYDIR "C:\\local\\boost_1_64_0_14_64\\libs")
+endif()
 
 include_directories(${CMAKE_BINARY_DIR}
   src
