@@ -3,10 +3,11 @@ cmake_minimum_required(VERSION 2.8.6)
 set(VERSION "0.1")
 set(REFS " (HEAD -> master)")
 
-set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.10.0\\5.10.0\\msvc2015_64")
-set(BOOST_ROOT "C:\\local\\boost_1_64_0_14_64")
-set(BOOST_LIBRARYDIR "C:\\local\\boost_1_64_0_14_64\\libs")
-
+if(WIN32)
+  set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.10.0\\5.10.0\\msvc2015_64")
+  set(BOOST_ROOT "C:\\local\\boost_1_64_0_14_64")
+  set(BOOST_LIBRARYDIR "C:\\local\\boost_1_64_0_14_64\\libs")
+endif()
 
 # Get the current working branch
 execute_process(
@@ -83,12 +84,12 @@ else()
   MESSAGE( STATUS "CXX COMPILER VERSION: " ${GCC_VERSION} )
   if (GCC_VERSION VERSION_GREATER 7.0)
       MESSAGE( STATUS "GCC 7 or higher found, enabling extra compiler switches" )
-      set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wundef -Wvla -Wwrite-strings -Werror -Wno-error=stringop-overflow -Wno-error=extra -Wimplicit-fallthrough=2 -Wno-error=init-self -Wno-error=format-truncation -Wno-error=terminate -Wno-error=unused-const-variable -Wno-error=logical-op -Wno-error=sign-compare -Wno-error=unused-variable -Wno-error=unused-function -Wno-error=deprecated-declarations -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
+      set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wundef -Wvla -Wwrite-strings -Werror -Wno-error=extra -Wno-error=unused-function -Wno-error=deprecated-declarations -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
   elseif(GCC_VERSION VERSION_GREATER 6.0)
       MESSAGE( STATUS "GCC 6 found, enabling extra compiler switches" )
       set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wundef -Wvla -Wwrite-strings -Werror -Wno-error=extra -Wno-error=init-self -Wno-error=terminate -Wno-error=unused-const-variable -Wno-error=logical-op -Wno-error=sign-compare -Wno-error=unused-variable -Wno-error=unused-function -Wno-error=deprecated-declarations -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
   else()
-      set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wundef -Wvla -Wwrite-strings -Werror -Wno-error=extra -Wno-error=logical-op -Wno-error=sign-compare -Wno-error=unused-variable -Wno-error=unused-function -Wno-error=deprecated-declarations -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
+      set(WARNINGS "-Wall -Wextra -Wpointer-arith -Wundef -Wvla -Wwrite-strings -Wno-error=extra   -Wno-error=unused-function -Wno-error=deprecated-declarations -Wno-error=sign-compare -Wno-error=strict-aliasing -Wno-error=type-limits -Wno-unused-parameter -Wno-error=unused-variable -Wno-error=undef -Wno-error=uninitialized -Wno-error=unused-result")
   endif()
 
   if(CMAKE_C_COMPILER_ID STREQUAL "Clang")

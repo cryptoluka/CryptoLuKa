@@ -166,13 +166,28 @@ bool Currency::getBlockReward(uint8_t blockMajorVersion, size_t medianSize, size
 
   assert(m_emissionSpeedFactor > 0 && m_emissionSpeedFactor <= 8 * sizeof(uint64_t));
 
-  uint64_t baseReward = (m_moneySupply - alreadyGeneratedCoins) >> m_emissionSpeedFactor;
+  // LUK REWARD CHANGES
+  uint64_t baseReward;
+  uint64_t factorCut = 44500000; // 0.445 LUK
+  uint64_t coinCut_v1 = 264000000000000; // 2.64M LUK
+  uint64_t coinCut_v2 = 292000000000000; // 2.92M LUK
+
+  if(alreadyGeneratedCoins < coinCut_v1) {
+    // 100M >> 22
+    baseReward = (m_moneySupply - alreadyGeneratedCoins) >> m_emissionSpeedFactor;
+ } else if (alreadyGeneratedCoins >= coinCut_v1 && alreadyGeneratedCoins <= coinCut_v2) {
+    // 100M -> 0,445
+    baseReward = factorCut;
+ } else {
+    // 100M >> 22
+    baseReward = (m_moneySupply - alreadyGeneratedCoins) >> m_emissionSpeedFactor;
+ }
+
 
   //infinite minimal block rewards after block reward falls under m_finalSubsidy per minute
   uint64_t subsidyTarget = m_difficultyTarget / 60 * m_finalSubsidy;
   if (baseReward < subsidyTarget) {
-
-	  baseReward = subsidyTarget;
+	  baseReward = subsidyTarget; // Subsidy 0.20 LUK
   }
 
   size_t blockGrantedFullRewardZone = blockGrantedFullRewardZoneByBlockVersion(blockMajorVersion);
