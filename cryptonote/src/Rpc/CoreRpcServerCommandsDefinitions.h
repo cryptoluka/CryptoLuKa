@@ -1,4 +1,5 @@
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
+// Copyright (c) 2016, The Karbowanec developers
 //
 // This file is part of Bytecoin.
 //
@@ -311,6 +312,23 @@ struct COMMAND_RPC_STOP_MINING {
   typedef EMPTY_STRUCT request;
   typedef STATUS_STRUCT response;
 };
+
+//-----------------------------------------------
+
+struct COMMAND_RPC_GET_PEER_LIST {
+	typedef EMPTY_STRUCT request;
+
+	struct response {
+		std::vector<std::string> peers;
+		std::string status;
+
+		void serialize(ISerializer &s) {
+			KV_MEMBER(peers)
+			KV_MEMBER(status)
+		}
+	};
+};
+
 
 //-----------------------------------------------
 struct COMMAND_RPC_STOP_DAEMON {
