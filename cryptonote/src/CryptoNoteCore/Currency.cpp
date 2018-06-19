@@ -592,7 +592,7 @@ Difficulty Currency::nextDifficulty(uint8_t blockMajorVersion, std::vector<uint6
 	}
 }
 
-difficulty_type Currency::nextDifficultyV4(std::vector<uint64_t> timestamps, std::vector<difficulty_type> cumulativeDifficulties) const {
+Difficulty Currency::nextDifficultyV4(std::vector<uint64_t> timestamps, std::vector<difficulty_type> cumulativeDifficulties) const {
   /*
   LWMA difficulty algorithm
   Copyright (c) 2017-2018 Zawy
