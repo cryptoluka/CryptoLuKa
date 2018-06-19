@@ -61,6 +61,7 @@ public:
   uint64_t difficultyTarget() const { return m_difficultyTarget; }
   size_t difficultyWindow() const { return m_difficultyWindow; }
   size_t difficultyWindowV2() const { return m_difficultyWindow_v2; }
+  size_t difficultyWindowV4() const { return m_difficultyWindow_v4; }
   size_t difficultyLag() const { return m_difficultyLag; }
   size_t difficultyCut() const { return m_difficultyCut; }
   size_t difficultyCutV2() const { return m_difficultyCut_v2; }
@@ -168,6 +169,7 @@ private:
   size_t m_difficultyCut;
 
   size_t m_difficultyWindow_v2;
+  size_t m_difficultyWindow_v4;
   size_t m_difficultyCut_v2;
 
   size_t m_maxBlockSizeInitial;
@@ -248,6 +250,7 @@ public:
   CurrencyBuilder& difficultyTarget(uint64_t val) { m_currency.m_difficultyTarget = val; return *this; }
   CurrencyBuilder& difficultyWindow(size_t val);
   CurrencyBuilder& difficultyWindowV2(size_t val);
+  CurrencyBuilder& difficultyWindowV4(size_t val);
   CurrencyBuilder& difficultyLag(size_t val) { m_currency.m_difficultyLag = val; return *this; }
   CurrencyBuilder& difficultyCut(size_t val) { m_currency.m_difficultyCut = val; return *this; }
   CurrencyBuilder& difficultyCutV2(size_t val) { m_currency.m_difficultyCut_v2 = val; return *this; }
