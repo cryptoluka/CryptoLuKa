@@ -605,7 +605,6 @@ Difficulty Currency::nextDifficultyV4(std::vector<uint64_t> timestamps, std::vec
   N = int(45 * (600 / T) ^ 0.3));
   Karbowanec improved
   */
-  logger(INFO) << "m_difficultyWindow_v4: " << m_difficultyWindow_v4;
   const int64_t T = static_cast<int64_t>(m_difficultyTarget);
   const size_t N = m_difficultyWindow_v4 - 1;
   if (timestamps.size() > N + 1) {
