@@ -126,7 +126,7 @@ bool serializePod(T& v, Common::StringView name, CryptoNote::ISerializer& serial
 
 bool serializeVarintVector(std::vector<uint32_t>& vector, CryptoNote::ISerializer& serializer, Common::StringView name) {
   size_t size = vector.size();
-  
+
   if (!serializer.beginArray(size, name)) {
     vector.clear();
     return false;
@@ -392,7 +392,7 @@ void serialize(ParentBlockSerializer& pbs, ISerializer& serializer) {
 
 void serializeBlockHeader(BlockHeader& header, ISerializer& serializer) {
   serializer(header.majorVersion, "major_version");
-  if (header.majorVersion > BLOCK_MAJOR_VERSION_3) {
+  if (header.majorVersion > BLOCK_MAJOR_VERSION_4) {
     throw std::runtime_error("Wrong major version");
   }
 

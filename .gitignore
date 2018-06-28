@@ -1,0 +1,9 @@
+.DS_Store
+/build
+/tags
+/CMakeFiles
+.idea
+.ycm_extra_conf.py
+.ycm_extra_conf.pyc
+Release
+Debug
