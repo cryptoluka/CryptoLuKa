@@ -615,9 +615,7 @@ Difficulty Currency::nextDifficultyV4(std::vector<uint64_t> timestamps, std::vec
   assert(n == cumulativeDifficulties.size());
   assert(n <= m_difficultyWindow_v4);
   if (n <= 2) return 1;
-  //if (n < (N + 1)) return 100000;
-  // To get an average solvetime to within +/- ~0.1%, use an adjustment factor.
-  if (n < (N + 1)) return 50;
+  if (n < (N + 1)) return 100000;
   // To get an average solvetime to within +/- ~0.1%, use an adjustment factor.
   const double_t adjust = 0.998;
   // The divisor k normalizes LWMA.
@@ -643,8 +641,7 @@ Difficulty Currency::nextDifficultyV4(std::vector<uint64_t> timestamps, std::vec
   nextDifficulty = harmonic_mean_D * T / LWMA;
   next_difficulty = static_cast<uint64_t>(nextDifficulty);
   if (next_difficulty < 100000) {
-    //next_difficulty = 100000;
-    next_difficulty = 50;
+    next_difficulty = 100000;
   }
   return next_difficulty;
 }
