@@ -37,16 +37,17 @@ const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW             = 60;
 const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V4          = 11;
 
 // MONEY_SUPPLY - total number coins to be generated
-const uint64_t MONEY_SUPPLY									 = UINT64_C(10000000000000000); // 100M
-const uint64_t FINAL_SUBSIDY_PER_MINUTE						 = UINT64_C(20000000); // 0.20 LUK
-const unsigned EMISSION_SPEED_FACTOR                         = 22;
+const uint64_t MONEY_SUPPLY					= UINT64_C(10000000000000000); // 100M
+const uint64_t FINAL_SUBSIDY_PER_MINUTE				= UINT64_C(20000000); // 0.20 LUK
+const unsigned EMISSION_SPEED_FACTOR                         	= 22;
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
-const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW               = 100;
-const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE     = 1000000; //size of block (bytes) after which reward for block calculated using block size
-const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2  = 1000000;
-const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1  = 1000000;
+const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW               	= 100;
+const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE     	= 1000000; //size of block (bytes) after which reward for block calculated using block size
+const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2  	= 1000000;
+const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1  	= 1000000;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_CURRENT = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
+
 const size_t   CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE        = 600;
 const size_t   CRYPTONOTE_DISPLAY_DECIMAL_POINT              = 8;
 const uint64_t MINIMUM_FEE                                   = UINT64_C(100000);    // pow(10, 5)
@@ -63,17 +64,18 @@ const size_t  DIFFICULTY_CUT_V2								 = 6;
 const size_t  DIFFICULTY_WINDOW_V2							 = DIFFICULTY_BLOCKS_V2 + DIFFICULTY_CUT_V2 * 2;
 const size_t  DIFFICULTY_WINDOW_V4							 = 61;
 
-const size_t   MAX_BLOCK_SIZE_INITIAL                        = 100 * 1024;
-const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR         = 100 * 1024;
-const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR_V2		 = 35 * 100 * 1024;
-const size_t   MAX_BLOCK_SIZE_ALLOWED_EVERY_N_BLOCK			 = 5;
-const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR       = 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 
-const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS     = 1;
-const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS    = DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS;
+const size_t   MAX_BLOCK_SIZE_INITIAL                        	= 100 * 1024;
+const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR         	= 100 * 1024;
+const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR_V2		= 35 * 100 * 1024;
+const size_t   MAX_BLOCK_SIZE_ALLOWED_EVERY_N_BLOCK		= 5;
+const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR       	= 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 
-const uint64_t CRYPTONOTE_MEMPOOL_TX_LIVETIME                = 60 * 60 * 24;     //seconds, one day
-const uint64_t CRYPTONOTE_MEMPOOL_TX_FROM_ALT_BLOCK_LIVETIME = 60 * 60 * 24 * 7; //seconds, one week
+const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS     	= 1;
+const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS    	= DIFFICULTY_TARGET * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS;
+
+const uint64_t CRYPTONOTE_MEMPOOL_TX_LIVETIME                	= 60 * 60 * 24;     //seconds, one day
+const uint64_t CRYPTONOTE_MEMPOOL_TX_FROM_ALT_BLOCK_LIVETIME 	= 60 * 60 * 24 * 7; //seconds, one week
 const uint64_t CRYPTONOTE_NUMBER_OF_PERIODS_TO_FORGET_TX_DELETED_FROM_POOL = 7;  // CRYPTONOTE_NUMBER_OF_PERIODS_TO_FORGET_TX_DELETED_FROM_POOL * CRYPTONOTE_MEMPOOL_TX_LIVETIME = time to forget tx
 
 const size_t   FUSION_TX_MAX_SIZE                            = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_CURRENT * 15 / 100;
@@ -88,15 +90,17 @@ const uint32_t UPGRADE_HEIGHT_V4                             = 144999;
 const unsigned UPGRADE_VOTING_THRESHOLD                      = 90;               // percent
 const uint32_t UPGRADE_VOTING_WINDOW                         = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
 const uint32_t UPGRADE_WINDOW                                = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY;  // blocks
+
 static_assert(0 < UPGRADE_VOTING_THRESHOLD && UPGRADE_VOTING_THRESHOLD <= 100, "Bad UPGRADE_VOTING_THRESHOLD");
 static_assert(UPGRADE_VOTING_WINDOW > 1, "Bad UPGRADE_VOTING_WINDOW");
 
-const char     CRYPTONOTE_BLOCKS_FILENAME[]                  = "blocks.bin";
-const char     CRYPTONOTE_BLOCKINDEXES_FILENAME[]            = "blockindexes.bin";
-const char     CRYPTONOTE_POOLDATA_FILENAME[]                = "poolstate.bin";
-const char     P2P_NET_DATA_FILENAME[]                       = "p2pstate.bin";
-const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json";
+const char     CRYPTONOTE_BLOCKS_FILENAME[]                  	= "blocks.bin";
+const char     CRYPTONOTE_BLOCKINDEXES_FILENAME[]            	= "blockindexes.bin";
+const char     CRYPTONOTE_POOLDATA_FILENAME[]                	= "poolstate.bin";
+const char     P2P_NET_DATA_FILENAME[]                       	= "p2pstate.bin";
+const char     MINER_CONFIG_FILE_NAME[]                      	= "miner_conf.json";
 } // parameters
+
 
 const char     CRYPTONOTE_NAME[]                             = "Luka";
 
@@ -130,14 +134,14 @@ const uint32_t P2P_DEFAULT_CONNECTION_TIMEOUT                = 5000;          //
 const uint32_t P2P_DEFAULT_PING_CONNECTION_TIMEOUT           = 2000;          // 2 seconds
 const uint64_t P2P_DEFAULT_INVOKE_TIMEOUT                    = 60 * 2 * 1000; // 2 minutes
 const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;          // 5 seconds
+
 const char     P2P_STAT_TRUSTED_PUB_KEY[] = "";
 
 const char* const SEED_NODES[] = {
 	"seed79.cryptoluka.cl:52420",
 	"seed80.cryptoluka.cl:52420",
 	"seed152.cryptoluka.cl:52420",
-	"seed219.cryptoluka.cl:52420",
-	"luka.chilepool.cl:52420"
+	"seed219.cryptoluka.cl:52420"
 };
 
 struct CheckpointData {
@@ -152,7 +156,11 @@ const CheckpointData CHECKPOINTS[] = {
 	{ 165, "e15372c7a3ad29dbcf4009b4f9ed43586777b046650b81c2d56ca5dbc6a935e6"},
 	{ 18000, "4a0fd7a883ca5a180aaec36cbc1c2c204ef2f703170851b61e1de035e32b1613"},
 	{ 25900, "1183f7d7de6aaeae755e626614df0ef9610bf2df24d032bb7a1d0f9f2650a08a"},
-	{ 27483, "7c485abdc0418ccab03ba2dc57087db89b83721744d2beb0a17cc7ae9e694f07"} // Forked Emission
+	{ 27483, "7c485abdc0418ccab03ba2dc57087db89b83721744d2beb0a17cc7ae9e694f07"}, // Forked Emission
+	{ 50000, "2e61795dd2e3cc5730299fc5f0ac51ecf97b4b5e798c71a212a101b549ca0a4c"},
+	{ 100000, "118b28b5e31a5f84c83cf3f08be5baee7605b0f600c92cfbf329f18a60658235"},
+	{ 117455, "fc4b46ea4d36c3ca8e0a98022afbf92c39754e6cdb0dbf4f2dba2af6af0966c6"},
+  { 132200, "5a85587e59876229f975217fb95a334fd44fe944498a2ea2fefc5d3d0197b90c"}
 };
 }
 
