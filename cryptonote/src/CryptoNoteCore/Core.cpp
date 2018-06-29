@@ -210,6 +210,7 @@ Core::Core(const Currency& currency, Logging::ILogger& logger, Checkpoints&& che
 
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_2, currency.upgradeHeight(BLOCK_MAJOR_VERSION_2));
   upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_3, currency.upgradeHeight(BLOCK_MAJOR_VERSION_3));
+  upgradeManager->addMajorBlockVersion(BLOCK_MAJOR_VERSION_4, currency.upgradeHeight(BLOCK_MAJOR_VERSION_4));
 
   transactionPool = std::unique_ptr<ITransactionPoolCleanWrapper>(new TransactionPoolCleanWrapper(
     std::unique_ptr<ITransactionPool>(new TransactionPool(logger)),
@@ -517,7 +518,7 @@ Difficulty Core::getDifficultyForNextBlock() const {
   size_t blocksCount = std::min(static_cast<size_t>(topBlockIndex), currency.difficultyBlocksCount(topBlockIndex));
 
   auto timestamps = mainChain->getLastTimestamps(blocksCount);
-  auto difficulties = mainChain->getLastCumulativeDifficulties(blocksCount);  
+  auto difficulties = mainChain->getLastCumulativeDifficulties(blocksCount);
 
   return currency.nextDifficulty(blockMajorVersion, timestamps, difficulties);
 }
@@ -1036,7 +1037,9 @@ bool Core::getBlockTemplate(BlockTemplate& b, const AccountPublicAddress& adr, c
   if (b.majorVersion == BLOCK_MAJOR_VERSION_1) {
     b.minorVersion = currency.upgradeHeight(BLOCK_MAJOR_VERSION_2) == IUpgradeDetector::UNDEF_HEIGHT ? BLOCK_MINOR_VERSION_1 : BLOCK_MINOR_VERSION_0;
   } else if (b.majorVersion >= BLOCK_MAJOR_VERSION_2) {
-    if (currency.upgradeHeight(BLOCK_MAJOR_VERSION_3) == IUpgradeDetector::UNDEF_HEIGHT) {
+    if (currency.upgradeHeight(BLOCK_MAJOR_VERSION_4) == IUpgradeDetector::UNDEF_HEIGHT) {
+      b.minorVersion = b.majorVersion == BLOCK_MAJOR_VERSION_3 ? BLOCK_MINOR_VERSION_1 : BLOCK_MINOR_VERSION_0;
+    } else if (currency.upgradeHeight(BLOCK_MAJOR_VERSION_3) == IUpgradeDetector::UNDEF_HEIGHT) {
       b.minorVersion = b.majorVersion == BLOCK_MAJOR_VERSION_2 ? BLOCK_MINOR_VERSION_1 : BLOCK_MINOR_VERSION_0;
     } else {
       b.minorVersion = BLOCK_MINOR_VERSION_0;
@@ -1056,6 +1059,21 @@ bool Core::getBlockTemplate(BlockTemplate& b, const AccountPublicAddress& adr, c
 
   b.previousBlockHash = getTopBlockHash();
   b.timestamp = time(nullptr);
+
+  // Jagerman fix - https://github.com/graft-project/GraftNetwork/pull/118/commits
+  uint64_t blockchain_timestamp_check_window = b.majorVersion < BLOCK_MAJOR_VERSION_4 ? parameters::BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW : parameters::BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V4;
+  if(height >= blockchain_timestamp_check_window) {
+    std::vector<uint64_t> timestamps;
+    for(size_t offset = height - blockchain_timestamp_check_window; offset < height; ++offset) {
+      BlockTemplate bl = getBlockByIndex(offset);
+      timestamps.push_back(bl.timestamp);
+    }
+    uint64_t median_ts = Common::medianValue(timestamps);
+    if (b.timestamp < median_ts) {
+      b.timestamp = median_ts;
+    }
+  }
+  // Jagerman fix
 
   size_t medianSize = calculateCumulativeBlocksizeLimit(height) / 2;
 
@@ -1999,7 +2017,7 @@ BlockDetails Core::getBlockDetails(const Crypto::Hash& blockHash) const {
 
   uint32_t blockIndex = segment->getBlockIndex(blockHash);
   BlockTemplate blockTemplate = restoreBlockTemplate(segment, blockIndex);
-  
+
   BlockDetails blockDetails;
   blockDetails.majorVersion = blockTemplate.majorVersion;
   blockDetails.minorVersion = blockTemplate.minorVersion;
@@ -2151,7 +2169,7 @@ TransactionDetails Core::getTransactionDetails(const Crypto::Hash& transactionHa
   }
   transactionDetails.extra.publicKey = transaction->getTransactionPublicKey();
   transaction->getExtraNonce(transactionDetails.extra.nonce);
-  
+
   transactionDetails.signatures = rawTransaction.signatures;
 
   transactionDetails.inputs.reserve(transaction->getInputCount());
@@ -2181,7 +2199,7 @@ TransactionDetails Core::getTransactionDetails(const Crypto::Hash& transactionHa
       MultisignatureInputDetails txInMultisigDetails;
       txInMultisigDetails.input = boost::get<MultisignatureInput>(rawTransaction.inputs[i]);
       std::pair<Crypto::Hash, size_t> outputReference = segment->getMultisignatureOutputReference(txInMultisigDetails.input.amount, txInMultisigDetails.input.outputIndex);
-      
+
       txInMultisigDetails.output.number = outputReference.second;
       txInMultisigDetails.output.transactionHash = outputReference.first;
       txInDetails = txInMultisigDetails;

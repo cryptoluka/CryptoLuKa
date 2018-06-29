@@ -185,6 +185,9 @@ namespace CryptoNote {
         const auto& b = m_blockchain[i].bl;
         voteCounter += (b.majorVersion == m_targetVersion - 1) && (b.minorVersion == BLOCK_MINOR_VERSION_1) ? 1 : 0;
       }
+      if (m_blockchain.size() % 10 == 0) {
+        logger(Logging::INFO, Logging::BRIGHT_YELLOW) << "#### Upgrade voting progress: " << voteCounter << " votes out of " << (m_currency.upgradeVotingThreshold() * m_currency.upgradeVotingWindow() / 100) << " needed.";
+      }
 
       return voteCounter;
     }
