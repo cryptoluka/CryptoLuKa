@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once 
+#pragma once
 #include "Chaingen.h"
 
 struct gen_upgrade : public test_chain_unit_base
@@ -30,6 +30,7 @@ struct gen_upgrade : public test_chain_unit_base
   bool checkBlockTemplateVersionIsV1(CryptoNote::Core& c, size_t evIndex, const std::vector<test_event_entry>& events);
   bool checkBlockTemplateVersionIsV2(CryptoNote::Core& c, size_t evIndex, const std::vector<test_event_entry>& events);
   bool checkBlockTemplateVersionIsV3(CryptoNote::Core& c, size_t evIndex, const std::vector<test_event_entry>& events);
+  bool checkBlockTemplateVersionIsV4(CryptoNote::Core& c, size_t evIndex, const std::vector<test_event_entry>& events);
   bool checkBlockRewardEqFee(CryptoNote::Core& c, size_t evIndex, const std::vector<test_event_entry>& events);
   bool checkBlockRewardIsZero(CryptoNote::Core& c, size_t evIndex, const std::vector<test_event_entry>& events);
   bool rememberCoinsInCirculationBeforeUpgrade(CryptoNote::Core& c, size_t evIndex, const std::vector<test_event_entry>& events);
@@ -42,6 +43,8 @@ private:
                          const CryptoNote::BlockTemplate& parentBlock, const CryptoNote::AccountBase& minerAcc) const;
   bool checkAfterUpgradeToV3(std::vector<test_event_entry>& events, test_generator& generator,
 	  const CryptoNote::BlockTemplate& parentBlock, const CryptoNote::AccountBase& minerAcc) const;
+  bool checkAfterUpgradeToV4(std::vector<test_event_entry>& events, test_generator& generator,
+  	  const CryptoNote::BlockTemplate& parentBlock, const CryptoNote::AccountBase& minerAcc) const;
   bool checkBlockTemplateVersion(CryptoNote::Core& c, uint8_t expectedMajorVersion, uint8_t expectedMinorVersion);
 
 private:
