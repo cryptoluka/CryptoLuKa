@@ -148,6 +148,7 @@ struct TransferCommand {
   std::vector<CryptoNote::WalletLegacyTransfer> dsts;
   std::vector<uint8_t> extra;
   uint64_t fee;
+  uint64_t lock_time;
 
   TransferCommand(const CryptoNote::Currency& currency) :
     m_currency(currency), fake_outs_count(0), fee(currency.minimumFee()) {
@@ -184,13 +185,29 @@ struct TransferCommand {
             if (!ok) {
               logger(ERROR, BRIGHT_RED) << "Fee value is invalid: " << value;
               return false;
-            }
+            } 
 
             if (fee < m_currency.minimumFee()) {
               logger(ERROR, BRIGHT_RED) << "Fee value is less than minimum: " << m_currency.minimumFee();
               return false;
             }
+          } else if (arg == "-t") {
+            bool ok = m_currency.parseAmount(value, lock_time);
+            if (!ok) {
+              logger(ERROR, BRIGHT_RED) << "Block number [-t] or UNIX is invalid: " << value;
+              return false;
+            } 
+
+            lock_time = boost::lexical_cast<uint64_t>(value);
+
+        //    lock_time = UINT64_C(std::strtoll(value, NULL, 0)); 
+
+            if (lock_time < 0) {
+              logger(ERROR, BRIGHT_RED) << "Block number [-t] or UNIX is less than minimum: " << m_currency.minimumFee();
+              return false;
+            }
           }
+
         } else {
           WalletLegacyTransfer destination;
           CryptoNote::TransactionDestinationEntry de;
@@ -317,7 +334,7 @@ std::string tryToOpenWalletOrLoadKeysOrThrow(LoggerRef& logger, std::unique_ptr<
       } else { // no keys, wallet error loading
         throw std::runtime_error("can't load wallet file '" + walletFileName + "', check password");
       }
-    } else { //new wallet ok 
+    } else { //new wallet ok
       return walletFileName;
     }
   } else if (keysExists) { //wallet not exists but keys presented
@@ -459,32 +476,43 @@ bool simple_wallet::exit(const std::vector<std::string> &args) {
 
 simple_wallet::simple_wallet(System::Dispatcher& dispatcher, const CryptoNote::Currency& currency, Logging::LoggerManager& log) :
   m_dispatcher(dispatcher),
-  m_daemon_port(0), 
-  m_currency(currency), 
+  m_daemon_port(0),
+  m_currency(currency),
   logManager(log),
   logger(log, "simplewallet"),
-  m_refresh_progress_reporter(*this), 
+  m_refresh_progress_reporter(*this),
   m_initResultPromise(nullptr),
   m_walletSynchronized(false) {
-  m_consoleHandler.setHandler("start_mining", boost::bind(&simple_wallet::start_mining, this, _1), "start_mining [<number_of_threads>] - Start mining in daemon");
-  m_consoleHandler.setHandler("stop_mining", boost::bind(&simple_wallet::stop_mining, this, _1), "Stop mining in daemon");
-  //m_consoleHandler.setHandler("refresh", boost::bind(&simple_wallet::refresh, this, _1), "Resynchronize transactions and balance");
+
+  // METHODS FOR RPC SIMPLEWALLET
+  m_consoleHandler.setHandler("address", boost::bind(&simple_wallet::print_address, this, _1), "Show current wallet public address");
   m_consoleHandler.setHandler("balance", boost::bind(&simple_wallet::show_balance, this, _1), "Show current wallet balance");
+  m_consoleHandler.setHandler("export_keys", boost::bind(&simple_wallet::print_keys, this, _1), "Show wallet private keys");
   m_consoleHandler.setHandler("incoming_transfers", boost::bind(&simple_wallet::show_incoming_transfers, this, _1), "Show incoming transfers");
   m_consoleHandler.setHandler("list_transfers", boost::bind(&simple_wallet::listTransfers, this, _1), "Show all known transfers");
   m_consoleHandler.setHandler("payments", boost::bind(&simple_wallet::show_payments, this, _1), "payments <payment_id_1> [<payment_id_2> ... <payment_id_N>] - Show payments <payment_id_1>, ... <payment_id_N>");
-  m_consoleHandler.setHandler("bc_height", boost::bind(&simple_wallet::show_blockchain_height, this, _1), "Show blockchain height");
   m_consoleHandler.setHandler("transfer", boost::bind(&simple_wallet::transfer, this, _1),
     "transfer <mixin_count> <addr_1> <amount_1> [<addr_2> <amount_2> ... <addr_N> <amount_N>] [-p payment_id] [-f fee]"
     " - Transfer <amount_1>,... <amount_N> to <address_1>,... <address_N>, respectively. "
     "<mixin_count> is the number of transactions yours is indistinguishable from (from 0 to maximum available)");
+  m_consoleHandler.setHandler("transfer_block", boost::bind(&simple_wallet::transfer_block, this, _1),
+    "Same parameters as normal 'Transfer' with [-t time_lock]."
+    "Ex: transfer 0 address amount -f fee -t blockNumber -p paymentId"
+    "<time_lock> is the number of block is the number of block height or unix timestamp");
+
+
+  m_consoleHandler.setHandler("start_mining", boost::bind(&simple_wallet::start_mining, this, _1), "start_mining [<number_of_threads>] - Start mining in daemon");
+  m_consoleHandler.setHandler("stop_mining", boost::bind(&simple_wallet::stop_mining, this, _1), "Stop mining in daemon");
+
+  m_consoleHandler.setHandler("bc_height", boost::bind(&simple_wallet::show_blockchain_height, this, _1), "Show blockchain height");
   m_consoleHandler.setHandler("set_log", boost::bind(&simple_wallet::set_log, this, _1), "set_log <level> - Change current log level, <level> is a number 0-4");
-  m_consoleHandler.setHandler("address", boost::bind(&simple_wallet::print_address, this, _1), "Show current wallet public address");
-  m_consoleHandler.setHandler("keys", boost::bind(&simple_wallet::print_keys, this, _1), "Show wallet private keys");
   m_consoleHandler.setHandler("save", boost::bind(&simple_wallet::save, this, _1), "Save wallet synchronized data");
   m_consoleHandler.setHandler("reset", boost::bind(&simple_wallet::reset, this, _1), "Discard cache data and start synchronizing from the start");
   m_consoleHandler.setHandler("help", boost::bind(&simple_wallet::help, this, _1), "Show this help");
   m_consoleHandler.setHandler("exit", boost::bind(&simple_wallet::exit, this, _1), "Close wallet");
+
+  // DISCARDED METHODS
+  //m_consoleHandler.setHandler("refresh", boost::bind(&simple_wallet::refresh, this, _1), "Resynchronize transactions and balance");
 }
 //----------------------------------------------------------------------------------------------------
 bool simple_wallet::set_log(const std::vector<std::string> &args) {
@@ -498,7 +526,7 @@ bool simple_wallet::set_log(const std::vector<std::string> &args) {
     fail_msg_writer() << "wrong number format, use: set_log <log_level_number_0-4>";
     return true;
   }
- 
+
   if (l > Logging::TRACE) {
     fail_msg_writer() << "wrong number range, use: set_log <log_level_number_0-4>";
     return true;
@@ -576,7 +604,7 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
     m_daemon_host = "localhost";
   if (!m_daemon_port)
     m_daemon_port = RPC_DEFAULT_PORT;
-  
+
   if (!m_daemon_address.empty()) {
     if (!parseUrlAddress(m_daemon_address, m_daemon_host, m_daemon_port)) {
       fail_msg_writer() << "failed to parse daemon address: " << m_daemon_address;
@@ -655,7 +683,7 @@ bool simple_wallet::init(const boost::program_options::variables_map& vm) {
 		}
 		Crypto::SecretKey private_spend_key = *(struct Crypto::SecretKey *) &private_spend_key_hash;
 		Crypto::SecretKey private_view_key = *(struct Crypto::SecretKey *) &private_view_key_hash;
-		
+
 		if (!new_wallet(private_spend_key, private_view_key, walletFileName, pwd_container.password())) {
 			logger(ERROR, BRIGHT_RED) << "account creation failed";
 			return false;
@@ -739,17 +767,17 @@ bool simple_wallet::new_wallet(Crypto::SecretKey &secret_key, Crypto::SecretKey 
 
                 AccountKeys keys;
                 m_wallet->getAccountKeys(keys);
-               
+
                 logger(INFO, BRIGHT_WHITE) << "Imported wallet: " << m_wallet->getAddress() << std::endl;
                 }
                 catch (const std::exception& e) {
                     fail_msg_writer() << "failed to import wallet: " << e.what();
                 return false;
                 }
-                
-                success_msg_writer() << 
+
+                success_msg_writer() <<
                     "**********************************************************************\n" <<
-                    "Your wallet has been imported.\n" << 
+                    "Your wallet has been imported.\n" <<
                     "Use \"help\" command to see the list of available commands.\n" <<
                     "Always use \"exit\" command when closing simplewallet to save\n" <<
                     "current session's state. Otherwise, you will possibly need to synchronize \n" <<
@@ -939,7 +967,7 @@ void simple_wallet::connectionStatusUpdated(bool connected) {
 void simple_wallet::externalTransactionCreated(CryptoNote::TransactionId transactionId)  {
   WalletLegacyTransaction txInfo;
   m_wallet->getTransaction(transactionId, txInfo);
-  
+
   std::stringstream logPrefix;
   if (txInfo.blockHeight == WALLET_LEGACY_UNCONFIRMED_TRANSACTION_HEIGHT) {
     logPrefix << "Unconfirmed";
@@ -1131,6 +1159,92 @@ bool simple_wallet::transfer(const std::vector<std::string> &args) {
 
   return true;
 }
+//----------------------------------------------------------------------------------------------------
+bool simple_wallet::transfer_block(const std::vector<std::string> &args) {
+  try {
+    TransferCommand cmd(m_currency);
+
+
+    // PARSE ARGUMENTS FOR COMMAND [-t]
+    if (!cmd.parseArguments(logger, args))
+      return false;
+
+
+    // ASK IF USER IS OK?
+    std::cout << "Take care! This transfer will also block your available balance until: " << cmd.lock_time << std::endl;
+    std::cout << "Are you sure to proceed?" << std::endl;
+    std::cout << "Type (y/n): ";
+
+    char c;
+    do {
+      std::string answer;
+      std::getline(std::cin, answer);
+      c = answer[0];
+      if (!(c == 'Y' || c == 'y' || c == 'N' || c == 'n')) {
+        std::cout << "Unknown command: " << c << std::endl;
+      } else {
+        break;
+      }
+    } while (true);
+
+    if (c == 'N' || c == 'n') {
+      fail_msg_writer() << "Transfer Cancelled" << std::endl;
+      return false;
+    }
+
+    
+    // CONTINUE TO LOCK BALANCES
+    CryptoNote::WalletHelper::SendCompleteResultObserver sent;
+
+    std::string extraString;
+    std::copy(cmd.extra.begin(), cmd.extra.end(), std::back_inserter(extraString));
+
+    WalletHelper::IWalletRemoveObserverGuard removeGuard(*m_wallet, sent);
+
+    CryptoNote::TransactionId tx = m_wallet->sendTransaction(cmd.dsts, cmd.fee, extraString, cmd.fake_outs_count, cmd.lock_time);
+    if (tx == WALLET_LEGACY_INVALID_TRANSACTION_ID) {
+      fail_msg_writer() << "Can't send money";
+      return true;
+    }
+
+    std::error_code sendError = sent.wait(tx);
+    removeGuard.removeObserver();
+
+    if (sendError) {
+      fail_msg_writer() << sendError.message();
+      return true;
+    }
+
+    CryptoNote::WalletLegacyTransaction txInfo;
+    m_wallet->getTransaction(tx, txInfo);
+    success_msg_writer(true) << "Money successfully sent, transaction " << Common::podToHex(txInfo.hash);
+
+
+    // ALERT YOUR TX
+    if(txInfo.unlockTime < 1000000000) {
+      success_msg_writer(true) << "Locked at Block: " << txInfo.unlockTime;
+    } else {
+      success_msg_writer(true) << "Locked at Timestamp: " << txInfo.unlockTime << " UTC";
+    }
+
+
+    try {
+      CryptoNote::WalletHelper::storeWallet(*m_wallet, m_wallet_file);
+    } catch (const std::exception& e) {
+      fail_msg_writer() << e.what();
+      return true;
+    }
+  } catch (const std::system_error& e) {
+    fail_msg_writer() << e.what();
+  } catch (const std::exception& e) {
+    fail_msg_writer() << e.what();
+  } catch (...) {
+    fail_msg_writer() << "unknown error";
+  }
+
+  return true;
+}
+
 //----------------------------------------------------------------------------------------------------
 bool simple_wallet::run() {
   {
@@ -1329,7 +1443,7 @@ int main(int argc, char* argv[]) {
     logger(INFO) << "Starting wallet rpc server";
     wrpc.run();
     logger(INFO) << "Stopped wallet rpc server";
-    
+
     try {
       logger(INFO) << "Storing wallet...";
       CryptoNote::WalletHelper::storeWallet(*wallet, walletFileName);
@@ -1341,10 +1455,10 @@ int main(int argc, char* argv[]) {
   } else {
     //runs wallet with console interface
     CryptoNote::simple_wallet wal(dispatcher, currency, logManager);
-    
+
     if (!wal.init(vm)) {
-      logger(ERROR, BRIGHT_RED) << "Failed to initialize wallet"; 
-      return 1; 
+      logger(ERROR, BRIGHT_RED) << "Failed to initialize wallet";
+      return 1;
     }
 
     std::vector<std::string> command = command_line::get_arg(vm, arg_command);
@@ -1354,7 +1468,7 @@ int main(int argc, char* argv[]) {
     Tools::SignalHandler::install([&wal] {
       wal.stop();
     });
-    
+
     wal.run();
 
     if (!wal.deinit()) {

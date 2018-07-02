@@ -1,4 +1,5 @@
-// Copyright (c) 2017-2018, Intense Coin developers
+// Copyright (c) 2018, CryptoLuKa developers
+// Copyright (c) 2017, Intense Coin developers
 // Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
 //
 // This file is part of Bytecoin.
@@ -37,9 +38,9 @@ const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW             = 60;
 const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V4          = 11;
 
 // MONEY_SUPPLY - total number coins to be generated
-const uint64_t MONEY_SUPPLY					= UINT64_C(10000000000000000); // 100M
-const uint64_t FINAL_SUBSIDY_PER_MINUTE				= UINT64_C(20000000); // 0.20 LUK
-const unsigned EMISSION_SPEED_FACTOR                         	= 22;
+const uint64_t MONEY_SUPPLY									= UINT64_C(10000000000000000); // 100M
+const uint64_t FINAL_SUBSIDY_PER_MINUTE						= UINT64_C(20000000); // 0.20 LUK
+const unsigned EMISSION_SPEED_FACTOR                        = 22;
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
 const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW               	= 100;
@@ -67,8 +68,8 @@ const size_t  DIFFICULTY_WINDOW_V4							 = 61;
 
 const size_t   MAX_BLOCK_SIZE_INITIAL                        	= 100 * 1024;
 const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR         	= 100 * 1024;
-const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR_V2		= 35 * 100 * 1024;
-const size_t   MAX_BLOCK_SIZE_ALLOWED_EVERY_N_BLOCK		= 5;
+const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_NUMERATOR_V2			= 35 * 100 * 1024;
+const size_t   MAX_BLOCK_SIZE_ALLOWED_EVERY_N_BLOCK				= 5;
 const uint64_t MAX_BLOCK_SIZE_GROWTH_SPEED_DENOMINATOR       	= 365 * 24 * 60 * 60 / DIFFICULTY_TARGET;
 
 const uint64_t CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS     	= 1;
@@ -150,7 +151,7 @@ struct CheckpointData {
 };
 
 const CheckpointData CHECKPOINTS[] = {
-	{ 0, "3e7b089856003ff9706e8db0a530bfec03d91143491086a2835fcdc2a38373e0"},
+	{ 0, "3e7b089856003ff9706e8db0a530bfec03d91143491086a2835fcdc2a38373e0"}, // Genesis
 	{ 163, "b96a73c6d78c40ccd08e7f8578e2fb57395348eab0d0e5b4ad778783e89fa621"},
 	{ 164, "57b496b43159e766da46cacf307e06183c3832e65225941b297bcd124e3c3e5b"}, // Dead Peer
 	{ 165, "e15372c7a3ad29dbcf4009b4f9ed43586777b046650b81c2d56ca5dbc6a935e6"},
@@ -159,7 +160,7 @@ const CheckpointData CHECKPOINTS[] = {
 	{ 27483, "7c485abdc0418ccab03ba2dc57087db89b83721744d2beb0a17cc7ae9e694f07"}, // Fork V1.2 - Emission
 	{ 50000, "2e61795dd2e3cc5730299fc5f0ac51ecf97b4b5e798c71a212a101b549ca0a4c"}, // 50k
 	{ 100000, "118b28b5e31a5f84c83cf3f08be5baee7605b0f600c92cfbf329f18a60658235"}, // 100k
-	{ 117455, "fc4b46ea4d36c3ca8e0a98022afbf92c39754e6cdb0dbf4f2dba2af6af0966c6"}, // Useless Checkpoint
+	{ 117455, "fc4b46ea4d36c3ca8e0a98022afbf92c39754e6cdb0dbf4f2dba2af6af0966c6"},
   	{ 132200, "20a3112cf291a3f36ce7a7df3ced26b1d3676b4ff19d75af0d60c32fb75e5cba"} // Fix Checkpoint
 };
 }

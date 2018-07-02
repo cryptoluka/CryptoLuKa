@@ -79,6 +79,7 @@ namespace CryptoNote
     bool open_wallet(const std::string &wallet_file, const std::string& password);
     bool close_wallet();
 
+
     bool help(const std::vector<std::string> &args = std::vector<std::string>());
     bool exit(const std::vector<std::string> &args);
     bool start_mining(const std::vector<std::string> &args);
@@ -89,6 +90,7 @@ namespace CryptoNote
     bool show_blockchain_height(const std::vector<std::string> &args);
     bool listTransfers(const std::vector<std::string> &args);
     bool transfer(const std::vector<std::string> &args);
+    bool transfer_block(const std::vector<std::string> &args);
     bool print_address(const std::vector<std::string> &args = std::vector<std::string>());
     bool print_keys(const std::vector<std::string> &args = std::vector<std::string>());
     bool save(const std::vector<std::string> &args);
