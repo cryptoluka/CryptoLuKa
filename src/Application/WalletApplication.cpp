@@ -60,7 +60,7 @@ namespace WalletGui {
 
 namespace {
 
-const char BYTECOIN_URI_SCHEME_NAME[] = "intensecoin";
+const char LUKA_URI_SCHEME_NAME[] = "cryptoluka";
 const QRegularExpression LOG_SPLASH_REG_EXP("\\[Core\\] Imported block with index");
 
 quint16 findPort() {
@@ -143,7 +143,7 @@ bool WalletApplication::init() {
   WalletLogger::info(tr("[Application] Initializing..."));
   m_lockFile = new QLockFile(Settings::instance().getDataDir().absoluteFilePath("lukacoinwallet.lock"));
   QUrl paymentUrl = QUrl::fromUserInput(arguments().last());
-  if (paymentUrl.scheme() != BYTECOIN_URI_SCHEME_NAME) {
+  if (paymentUrl.scheme() != LUKA_URI_SCHEME_NAME) {
     paymentUrl = QUrl();
   }
 
@@ -241,7 +241,7 @@ bool WalletApplication::initCryptoNoteAdapter() {
   for (;;) {
     if (m_splash != nullptr) {
       m_splash->show();
-      m_splash->showMessage(QObject::tr("Loading blockchain..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
+      m_splash->showMessage(QObject::tr("v1.3 - Loading blockchain..."), Qt::AlignLeft | Qt::AlignBottom, Qt::white);
       if (m_logWatcher == nullptr) {
         m_logWatcher = new LogFileWatcher(Settings::instance().getDataDir().absoluteFilePath(CORE_LOG_FILE_NAME), this);
         connect(m_logWatcher, &LogFileWatcher::newLogStringSignal, this, &WalletApplication::newLogString);
@@ -265,7 +265,7 @@ bool WalletApplication::initCryptoNoteAdapter() {
       dlg.setText(QObject::tr("The database is currently used by another application or service.\n"
       "If you have lukad with non-default RPC port, you should terminate it and relaunch LuKaWallet\n"
       "or\n"
-      "Set the Local deamon required port in LuKaWallet Menu/Preferences/Connection settings."));
+      "Set the Local daemon required port in LuKaWallet Menu/Preferences/Connection settings."));
 	  if (m_splash != nullptr)
 		  m_splash->hide();
       dlg.exec();

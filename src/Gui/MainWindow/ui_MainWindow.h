@@ -556,8 +556,10 @@ public:
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QStringLiteral("menuHelp"));
         MainWindow->setMenuBar(menubar);
+
         statusBar = new WalletGui::WalletStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
+
         MainWindow->setStatusBar(statusBar);
 
         menubar->addAction(menuFile->menuAction());
