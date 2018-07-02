@@ -65,6 +65,7 @@ DaemonCommandsHandler::DaemonCommandsHandler(CryptoNote::Core& core, CryptoNote:
   m_consoleHandler.setHandler("print_pool", boost::bind(&DaemonCommandsHandler::print_pool, this, _1), "Print transaction pool (long format)");
   m_consoleHandler.setHandler("print_pool_sh", boost::bind(&DaemonCommandsHandler::print_pool_sh, this, _1), "Print transaction pool (short format)");
   m_consoleHandler.setHandler("set_log", boost::bind(&DaemonCommandsHandler::set_log, this, _1), "set_log <level> - Change current log level, <level> is a number 0-4");
+  m_consoleHandler.setHandler("top", boost::bind(&DaemonCommandsHandler::showTop, this, _1), "Print Top Index Block (Actual Height)");
 }
 
 //--------------------------------------------------------------------------------
@@ -286,5 +287,11 @@ bool DaemonCommandsHandler::print_pool_sh(const std::vector<std::string>& args)
 
   std::cout << std::endl;
 
+  return true;
+}
+//--------------------------------------------------------------------------------
+bool DaemonCommandsHandler::showTop(const std::vector<std::string>& args)
+{
+  std::cout << "Actual Height: " << (m_core.getTopBlockIndex() + 1) << std::endl;
   return true;
 }
