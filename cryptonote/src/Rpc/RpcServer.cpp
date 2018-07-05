@@ -453,6 +453,7 @@ bool RpcServer::f_on_blocks_list_json(const F_COMMAND_RPC_GET_BLOCKS_LIST::reque
 		block_short.height = i;
 		block_short.hash = Common::podToHex(block_hash);
 		block_short.tx_count = blk.transactionHashes.size() + 1;
+		block_short.difficulty = blkDetails.difficulty;
 
 		res.blocks.push_back(block_short);
 
