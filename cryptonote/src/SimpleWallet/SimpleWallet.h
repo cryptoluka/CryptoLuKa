@@ -74,29 +74,51 @@ namespace CryptoNote
 
     bool run_console_handler();
 
+
+    //---------------- Wallet ----------------------------
     bool new_wallet(const std::string &wallet_file, const std::string& password);
     bool new_wallet(Crypto::SecretKey &secret_key, Crypto::SecretKey &view_key, const std::string &wallet_file, const std::string& password);
     bool open_wallet(const std::string &wallet_file, const std::string& password);
     bool close_wallet();
 
 
+    //---------------- General ---------------------------
     bool help(const std::vector<std::string> &args = std::vector<std::string>());
     bool exit(const std::vector<std::string> &args);
-    bool start_mining(const std::vector<std::string> &args);
-    bool stop_mining(const std::vector<std::string> &args);
-    bool show_balance(const std::vector<std::string> &args = std::vector<std::string>());
-    bool show_incoming_transfers(const std::vector<std::string> &args);
-    bool show_outgoing_transfers(const std::vector<std::string> &args);
-    bool show_payments(const std::vector<std::string> &args);
-    bool show_blockchain_height(const std::vector<std::string> &args);
-    bool listTransfers(const std::vector<std::string> &args);
-    bool transfer(const std::vector<std::string> &args);
-    bool transfer_block(const std::vector<std::string> &args);
-    bool print_address(const std::vector<std::string> &args = std::vector<std::string>());
-    bool print_keys(const std::vector<std::string> &args = std::vector<std::string>());
     bool save(const std::vector<std::string> &args);
     bool reset(const std::vector<std::string> &args);
     bool set_log(const std::vector<std::string> &args);
+
+
+    //---------------- Wallet ---------------------------
+    bool show_balance(const std::vector<std::string> &args = std::vector<std::string>());
+    bool show_payments(const std::vector<std::string> &args);
+    bool print_address(const std::vector<std::string> &args = std::vector<std::string>());
+    bool print_keys(const std::vector<std::string> &args = std::vector<std::string>());
+
+
+    //---------------- Mining ----------------------------
+    bool start_mining(const std::vector<std::string> &args);
+    bool stop_mining(const std::vector<std::string> &args);
+
+
+    //---------------- Transactions ----------------------
+    bool transfer(const std::vector<std::string> &args);
+    bool transfer_block(const std::vector<std::string> &args);
+    bool show_incoming_transfers(const std::vector<std::string> &args);
+    bool show_outgoing_transfers(const std::vector<std::string> &args);
+    bool listTransfers(const std::vector<std::string> &args);
+
+
+    //---------------- Utilities -------------------------
+    bool generate_payment_id(const std::vector<std::string> &args);
+
+
+    //---------------- Blockchain ---------------------------
+    bool show_blockchain_height(const std::vector<std::string> &args);
+
+    
+    
 
     bool ask_wallet_create_if_needed();
 
