@@ -487,7 +487,8 @@ simple_wallet::simple_wallet(System::Dispatcher& dispatcher, const CryptoNote::C
   // METHODS FOR RPC SIMPLEWALLET
   m_consoleHandler.setHandler("address", boost::bind(&simple_wallet::print_address, this, _1), "Show current wallet public address");
   m_consoleHandler.setHandler("balance", boost::bind(&simple_wallet::show_balance, this, _1), "Show current wallet balance");
-  m_consoleHandler.setHandler("export_keys", boost::bind(&simple_wallet::print_keys, this, _1), "Show wallet private keys");
+  m_consoleHandler.setHandler("export_private_keys", boost::bind(&simple_wallet::export_private_keys, this, _1), "Show wallet private keys");
+  m_consoleHandler.setHandler("export_tracking_key", boost::bind(&simple_wallet::export_tracking_key, this, _1), "Show the tracking key of the opened wallet");
   m_consoleHandler.setHandler("list_transfers", boost::bind(&simple_wallet::listTransfers, this, _1), "Show all known transfers");
   m_consoleHandler.setHandler("list_incoming_transfers", boost::bind(&simple_wallet::show_incoming_transfers, this, _1), "Show incoming transfers");
   m_consoleHandler.setHandler("list_outgoing_transfers", boost::bind(&simple_wallet::show_outgoing_transfers, this, _1), "Show outgoing transfers");
@@ -1016,8 +1017,10 @@ void simple_wallet::synchronizationProgressUpdated(uint32_t current, uint32_t to
 }
 
 bool simple_wallet::show_balance(const std::vector<std::string>& args/* = std::vector<std::string>()*/) {
-  success_msg_writer() << "available balance: " << m_currency.formatAmount(m_wallet->actualBalance()) <<
-    ", locked amount: " << m_currency.formatAmount(m_wallet->pendingBalance());
+
+  // Prints Actual & Pending Balance
+  success_msg_writer() << "Available balance: " << m_currency.formatAmount(m_wallet->actualBalance());
+  success_msg_writer() << "Locked amount: " << m_currency.formatAmount(m_wallet->pendingBalance());
 
   return true;
 }
@@ -1305,16 +1308,38 @@ bool simple_wallet::print_address(const std::vector<std::string> &args/* = std::
 }
 //----------------------------------------------------------------------------------------------------
 
-//----------------
-// Metodo para imprimir las llaves privadas --> Private Key Luka
-
-bool simple_wallet::print_keys(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
+bool simple_wallet::export_private_keys(const std::vector<std::string> &args/* = std::vector<std::string>()*/) {
 	AccountKeys keys;
 	m_wallet->getAccountKeys(keys);
+
+  // Every Key Splited
 	success_msg_writer() << "Address: " << m_wallet->getAddress();
 	success_msg_writer() << "Secret spend key: " << keys.spendSecretKey;
 	success_msg_writer() << "Secret view key: " << keys.viewSecretKey;
+
+  // GUI Format for Private Key
+  success_msg_writer(true) << "Private key GUI: " << Common::podToHex(keys.address.spendPublicKey) << Common::podToHex(keys.address.viewPublicKey) << Common::podToHex(keys.spendSecretKey) << Common::podToHex(keys.viewSecretKey);
 	return true;
+}
+
+//----------------------------------------------------------------------------------------------------
+bool simple_wallet::export_tracking_key(const std::vector<std::string>& args/* = std::vector<std::string>()*/) {
+    AccountKeys keys;
+    m_wallet->getAccountKeys(keys);
+    std::string spend_public_key = Common::podToHex(keys.address.spendPublicKey);
+
+    // Remove Spend Key for Tracking
+    keys.spendSecretKey = boost::value_initialized<Crypto::SecretKey>();
+
+    success_msg_writer() << "Address: " << m_wallet->getAddress();
+
+    // GUI Format for Tracking Key
+    success_msg_writer(true) << "Tracking key GUI: " << spend_public_key << Common::podToHex(keys.address.viewPublicKey) << Common::podToHex(keys.spendSecretKey) << Common::podToHex(keys.viewSecretKey);
+    
+    // This will show Tracking Key in style of Private Key Backup or Paperwallet, to prevent confusing we use above style of Bytecoin like tracking keys
+    // success_msg_writer(true) << "Tracking key: " << Tools::Base58::encode_addr(parameters::CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX, std::string(reinterpret_cast<char*>(&keys), sizeof(keys)));
+
+    return true;
 }
 
 //----------------

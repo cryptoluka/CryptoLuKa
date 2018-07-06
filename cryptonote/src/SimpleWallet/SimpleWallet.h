@@ -91,10 +91,12 @@ namespace CryptoNote
 
 
     //---------------- Wallet ---------------------------
+    bool export_private_keys(const std::vector<std::string> &args = std::vector<std::string>());
+    bool export_tracking_key(const std::vector<std::string> &args = std::vector<std::string>());
     bool show_balance(const std::vector<std::string> &args = std::vector<std::string>());
     bool show_payments(const std::vector<std::string> &args);
     bool print_address(const std::vector<std::string> &args = std::vector<std::string>());
-    bool print_keys(const std::vector<std::string> &args = std::vector<std::string>());
+    
 
 
     //---------------- Mining ----------------------------
@@ -118,7 +120,7 @@ namespace CryptoNote
     bool show_blockchain_height(const std::vector<std::string> &args);
 
     
-    
+
 
     bool ask_wallet_create_if_needed();
 
