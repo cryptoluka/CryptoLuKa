@@ -426,6 +426,60 @@
         </widget>
        </item>
        <item>
+        <widget class="QFrame" name="m_addressQRFrame">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <widget class="QWidget" name="verticalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>160</width>
+            <height>80</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="qr_vertical_layout">
+           <item>
+            <layout class="QHBoxLayout" name="qr_horizontal_layout">
+             <item>
+              <widget class="WalletGui::QRLabel" name="m_qrLabel" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>150</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -435,7 +489,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>34</width>
+           <width>26</width>
            <height>20</height>
           </size>
          </property>
@@ -815,7 +869,7 @@
      <x>0</x>
      <y>0</y>
      <width>1273</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1094,6 +1148,11 @@
    <class>WalletGui::WalletStatusBar</class>
    <extends>QStatusBar</extends>
    <header>Gui/MainWindow/WalletStatusBar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WalletGui::QRLabel</class>
+   <extends>QWidget</extends>
+   <header>walletgui::qrlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

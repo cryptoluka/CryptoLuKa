@@ -22,6 +22,7 @@
 #include "IApplicationEventHandler.h"
 #include "ICryptoNoteAdapter.h"
 #include "IWalletAdapter.h"
+#include "QRLabel.h"
 
 class QActionGroup;
 class QDataWidgetMapper;
@@ -47,7 +48,10 @@ class MainWindow : public QMainWindow, public IWalletAdapterObserver, public IAp
   Q_OBJECT
   Q_DISABLE_COPY(MainWindow)
 
+
 public:
+   static MainWindow& instance();
+
   MainWindow(ICryptoNoteAdapter* _cryptoNoteAdapter, IAddressBookManager* _addressBookManager,
     IDonationManager* _donationManager, IOptimizationManager* _optimizationManager, IMiningManager* _miningManager,
     IApplicationEventHandler* _applicationEventHandler, INewsReader* _blogReader,
@@ -105,6 +109,9 @@ private:
   QString m_styleSheetTemplate;
   QDataWidgetMapper* m_walletStateMapper;
   QMovie* m_syncMovie;
+  QRLabel* m_qrLabel;
+
+  static MainWindow* m_instance;
 
   void createRecentWalletMenu();
   void updateRecentWalletActions();
