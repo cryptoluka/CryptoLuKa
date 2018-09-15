@@ -214,7 +214,10 @@ MainWindow::MainWindow(ICryptoNoteAdapter* _cryptoNoteAdapter, IAddressBookManag
   connect(qApp, &QGuiApplication::commitDataRequest, this, &MainWindow::commitData);
 
 
-    m_qrLabel->setGeometry(910,8,90,90);
+     m_qrLabel->setGeometry(970,8,90,90);
+   //  m_qrLabel->setGeometry( m_ui->m_walletFrame->x() +  m_ui->m_walletFrame->width() + 40,8,90,90);
+
+
 
     // OPENS THE WALLET
     m_qrLabel->showQRCode(m_walletStateModel->index(0, WalletStateModel::COLUMN_ADDRESS).data().toString());

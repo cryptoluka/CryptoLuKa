@@ -483,6 +483,7 @@ public:
 
         horizontalLayout->addWidget(m_toolFrame);
 
+
         m_overviewFrame = new WalletGui::OverviewFrame(centralwidget);
         m_overviewFrame->setObjectName(QStringLiteral("m_overviewFrame"));
         m_overviewFrame->setFrameShape(QFrame::NoFrame);
