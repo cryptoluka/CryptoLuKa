@@ -123,6 +123,7 @@ std::unordered_map<std::string, RpcServer::RpcHandler<RpcServer::HandlerFunction
   { "/get_transaction_hashes_by_payment_id.bin", { binMethod<COMMAND_RPC_GET_TRANSACTION_HASHES_BY_PAYMENT_ID>(&RpcServer::onGetTransactionHashesByPaymentId), false } },
 
   // json handlers
+  { "/getrandom_outs", { jsonMethod<COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS_JSON>(&RpcServer::on_get_random_outs_json), false } },
   { "/gettotalcoins", { jsonMethod<COMMAND_RPC_GET_TOTAL_COINS>(&RpcServer::on_get_total_coins), true } },
   { "/getinfo", { jsonMethod<COMMAND_RPC_GET_INFO>(&RpcServer::on_get_info), true } },
   { "/getheight", { jsonMethod<COMMAND_RPC_GET_HEIGHT>(&RpcServer::on_get_height), true } },
@@ -334,6 +335,40 @@ bool RpcServer::on_get_random_outs(const COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOU
   res.status = CORE_RPC_STATUS_OK;
   return true;
 }
+
+
+
+bool RpcServer::on_get_random_outs_json(const COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS_JSON::request& req, COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS_JSON::response& res) {
+    
+    res.status = "Failed";
+            
+    for (uint64_t amount : req.amounts) {
+      std::vector<uint32_t> globalIndexes;
+      std::vector<Crypto::PublicKey> publicKeys;
+      if (!m_core.getRandomOutputs(amount, static_cast<uint16_t>(req.outs_count), globalIndexes, publicKeys)) {
+        return true;
+      }
+
+      assert(globalIndexes.size() == publicKeys.size());
+      res.outs.emplace_back(COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS_JSON_outs_for_amount{amount, {}});
+
+      for (size_t i = 0; i < globalIndexes.size(); ++i) {
+        COMMAND_RPC_GET_RANDOM_OUTPUTS_FOR_AMOUNTS_JSON_out_entry out_entry;
+        out_entry.global_amount_index = globalIndexes[i];
+        out_entry.out_key = publicKeys[i];
+        res.outs.back().outs.push_back(out_entry);
+      }
+  }
+
+  res.status = CORE_RPC_STATUS_OK;
+
+  return true;
+}
+
+
+
+
+
 
 bool RpcServer::onGetPoolChanges(const COMMAND_RPC_GET_POOL_CHANGES::request& req, COMMAND_RPC_GET_POOL_CHANGES::response& rsp) {
   rsp.status = CORE_RPC_STATUS_OK;
