@@ -625,10 +625,14 @@ std::error_code Core::addBlock(const CachedBlock& cachedBlock, RawBlock&& rawBlo
       logger(Logging::WARNING) << "Checkpoint block hash mismatch for block " << cachedBlock.getBlockHash();
       return error::BlockValidationError::CHECKPOINT_BLOCK_HASH_MISMATCH;
     }
-  } // else if (!currency.checkProofOfWork(cryptoContext, cachedBlock, currentDifficulty)) {
-    // logger(Logging::WARNING) << "Proof of work too weak for block " << cachedBlock.getBlockHash();
-    // return error::BlockValidationError::PROOF_OF_WORK_TOO_WEAK;
-  //}
+  } else if(alreadyGeneratedCoins > 286773256001183) {
+    if (!currency.checkProofOfWork(cryptoContext, cachedBlock, currentDifficulty)) {
+     logger(Logging::WARNING) << "Proof of work too weak for block " << cachedBlock.getBlockHash();
+     return error::BlockValidationError::PROOF_OF_WORK_TOO_WEAK;
+    }
+  }
+
+
 
   auto ret = error::AddBlockErrorCode::ADDED_TO_ALTERNATIVE;
 
